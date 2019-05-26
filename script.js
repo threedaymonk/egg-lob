@@ -37,8 +37,13 @@ const pick = arr => arr[Math.floor(Math.random() * arr.length)];
 class Game {
   constructor() {
     this.board = shuffle(DICE).map(d => pick(d));
+    this.drawBoard();
+    this.startAt = new Date();
+    this.countdownTimer = setInterval(this.updateCountdown.bind(this), 100);
+  }
+
+  drawBoard() {
     let tiles = document.querySelectorAll(TILE_SELECTOR);
-    console.log(tiles);
     for (let i = 0; i < BOARD_SIZE; i++) {
       let letter = this.board[i];
       tiles[i].innerText = letter;
@@ -47,14 +52,11 @@ class Game {
         tiles[i].classList.add("ambiguous");
       }
     }
-    this.startAt = new Date();
-    this.countdownTimer = setInterval(this.updateCountdown.bind(this), 100);
   }
 
   updateCountdown() {
     let elapsed = new Date() - this.startAt;
     let fractionLeft = Math.max(0, GAME_DURATION - elapsed) / GAME_DURATION;
-    console.log([GAME_DURATION, elapsed, fractionLeft]);
     document.querySelector(COUNTDOWN_SELECTOR).
       setAttribute("style", `width: ${fractionLeft * 100}%;`);
     if (fractionLeft <= 0) {
