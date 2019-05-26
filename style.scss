@@ -1,0 +1,53 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: serif;
+}
+
+#board {
+  position: relative;
+  max-width: 400px;
+  font-size: 15vw;
+  font-weight: bold;
+
+  &:after {
+    content: "";
+    display: block;
+    padding-bottom: 100%;
+  }
+
+  div {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border: 1px solid green;
+
+    display: flex;
+    flex-wrap: wrap;
+
+    div {
+      position: relative;
+      display: block;
+      border: 1px solid black;
+      text-align: center;
+      width: 25%;
+      height: 25%;
+      margin: 0;
+      padding-top: 3.5%;
+
+      &.east  { transform: rotate(90deg);  }
+      &.south { transform: rotate(180deg); }
+      &.west  { transform: rotate(270deg); }
+
+      &.ambiguous { text-decoration: underline; }
+    }
+  }
+}
+
+@media only screen and (min-width: 400px)  {
+  #board {
+    font-size: 60px;
+  }
+}
