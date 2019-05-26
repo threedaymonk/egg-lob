@@ -1,5 +1,12 @@
-* {
-  box-sizing: border-box;
+$maximum-width: 400px;
+$font-scale: 0.15;
+$spacing-unit: 20px;
+
+* { box-sizing: border-box; }
+
+h1, h2, h3, h4 {
+  margin: 0 0 $spacing-unit 0;
+  padding: 0;
 }
 
 body {
@@ -8,9 +15,10 @@ body {
 
 #board {
   position: relative;
-  max-width: 400px;
-  font-size: 15vw;
+  max-width: $maximum-width;
+  font-size: $font-scale * 100vw;
   font-weight: bold;
+  margin-bottom: $spacing-unit;
 
   &:after {
     content: "";
@@ -46,8 +54,8 @@ body {
   }
 }
 
-@media only screen and (min-width: 400px)  {
+@media only screen and (min-width: $maximum-width)  {
   #board {
-    font-size: 60px;
+    font-size: $font-scale * $maximum-width;
   }
 }
