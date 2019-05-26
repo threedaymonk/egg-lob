@@ -1,5 +1,8 @@
 $maximum-width: 400px;
 $font-scale: 0.15;
+$bar-height: 20px;
+$grey: #888;
+$accent: #f80;
 $spacing-unit: 20px;
 
 * { box-sizing: border-box; }
@@ -51,6 +54,19 @@ body {
 
       &.ambiguous { text-decoration: underline; }
     }
+  }
+}
+
+#countdown {
+  max-width: $maximum-width;
+  height: $bar-height;
+  background-color: $grey;
+  margin-bottom: $spacing-unit;
+
+  div {
+    background-color: $accent;
+    height: $bar-height;
+    width: 0;
   }
 }
 

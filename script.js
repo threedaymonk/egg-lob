@@ -18,8 +18,10 @@ const DICE = [
 ]
 const BOARD_SIZE = DICE.length;
 const ORIENTATIONS = ["north", "east", "south", "west"];
-const TILE_SELECTOR = "#tiles>*";
 const AMBIGUOUS_LETTERS = ["M", "N", "W", "Z"];
+const GAME_DURATION = 2 * 60 * 1000;
+const TILE_SELECTOR = "#tiles>*";
+const COUNTDOWN_SELECTOR = "#countdown>*";
 
 const shuffle = arr => {
   let shuffled = arr.slice();
@@ -44,6 +46,19 @@ class Game {
       if (AMBIGUOUS_LETTERS.includes(letter)) {
         tiles[i].classList.add("ambiguous");
       }
+    }
+    this.startAt = new Date();
+    this.countdownTimer = setInterval(this.updateCountdown.bind(this), 100);
+  }
+
+  updateCountdown() {
+    let elapsed = new Date() - this.startAt;
+    let fractionLeft = Math.max(0, GAME_DURATION - elapsed) / GAME_DURATION;
+    console.log([GAME_DURATION, elapsed, fractionLeft]);
+    document.querySelector(COUNTDOWN_SELECTOR).
+      setAttribute("style", `width: ${fractionLeft * 100}%;`);
+    if (fractionLeft <= 0) {
+      clearInterval(this.countdownTimer);
     }
   }
 }
