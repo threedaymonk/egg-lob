@@ -35,6 +35,11 @@ body {
   height: $header-size;
   top: 4px;
   right: 0;
+
+  &:disabled {
+    border-color: $grey;
+    color: $grey;
+  }
 }
 
 #board {
