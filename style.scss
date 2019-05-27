@@ -1,5 +1,5 @@
 $maximum-width: 400px;
-$font-scale: 0.15;
+$font-scale: 0.13;
 $bar-height: 20px;
 $grey: #888;
 $accent: #f80;
@@ -69,7 +69,7 @@ body {
       width: 25%;
       height: 25%;
       margin: 0;
-      padding-top: 3.5%;
+      padding-top: 4%;
 
       &.east  { transform: rotate(90deg);  }
       &.south { transform: rotate(180deg); }
