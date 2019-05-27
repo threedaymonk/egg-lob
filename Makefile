@@ -1,9 +1,9 @@
 .PHONY : default clean
 
-default : style.css
+default : public/style.css
 
-%.css : %.scss
+public/%.css : %.scss
 	sass $< $@
 
 clean :
-	rm -f *.css *.map
+	rm -f public/*.css public/*.map
