@@ -63,7 +63,7 @@
       document.querySelector(COUNTDOWN_SELECTOR).
         setAttribute("style", `width: ${fractionLeft * 100}%;`);
       if (fractionLeft <= 0) {
-        clearInterval(this.countdownTimer);
+        this.finish();
       }
     }
 
