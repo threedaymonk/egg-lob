@@ -1,6 +1,6 @@
 # EGG LOB
 
-A simple implementation of a popular word game. Reload for a new game.
+A simple implementation of a popular word game.
 
 ## Prerequisites
 

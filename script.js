@@ -23,6 +23,7 @@
   const GAME_DURATION = 2 * 60 * 1000;
   const TILE_SELECTOR = "#tiles>*";
   const COUNTDOWN_SELECTOR = "#countdown>*";
+  const PLAY_BUTTON_SELECTOR = "#playButton";
 
   const shuffle = arr => {
     let shuffled = arr.slice();
@@ -37,6 +38,7 @@
 
   class Game {
     constructor() {
+      document.querySelector(PLAY_BUTTON_SELECTOR).disabled = true;
       this.board = shuffle(DICE).map(d => pick(d));
       this.drawBoard();
       this.startAt = new Date();
@@ -64,7 +66,15 @@
         clearInterval(this.countdownTimer);
       }
     }
+
+    finish() {
+      clearInterval(this.countdownTimer);
+      document.querySelector(PLAY_BUTTON_SELECTOR).disabled = false;
+    }
   }
 
-  window.onload = () => new Game();
+  window.onload = () => {
+    document.querySelector(PLAY_BUTTON_SELECTOR).
+      addEventListener('click', () => new Game())
+  }
 }

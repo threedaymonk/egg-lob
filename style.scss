@@ -4,6 +4,7 @@ $bar-height: 20px;
 $grey: #888;
 $accent: #f80;
 $spacing-unit: 20px;
+$header-size: 40px;
 
 * { box-sizing: border-box; }
 
@@ -12,13 +13,33 @@ h1, h2, h3, h4 {
   padding: 0;
 }
 
+h1 {
+  font-size: $header-size;
+}
+
 body {
-  font-family: serif;
+  font-family: sans-serif;
+}
+
+#wrapper {
+  margin: 0 auto;
+  position: relative;
+  max-width: $maximum-width;
+}
+
+#playButton {
+  border: 4px solid black;
+  border-radius: 8px;
+  background-color: white;
+  position: absolute;
+  height: $header-size;
+  top: 4px;
+  right: 0;
 }
 
 #board {
   position: relative;
-  max-width: $maximum-width;
+  font-family: serif;
   font-size: $font-scale * 100vw;
   font-weight: bold;
   margin-bottom: $spacing-unit;
@@ -34,6 +55,7 @@ body {
     width: 100%;
     height: 100%;
     border: 2px solid black;
+    background-color: black;
 
     display: flex;
     flex-wrap: wrap;
@@ -42,6 +64,7 @@ body {
       position: relative;
       display: block;
       border: 2px solid black;
+      background-color: white;
       text-align: center;
       width: 25%;
       height: 25%;
