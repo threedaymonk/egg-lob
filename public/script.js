@@ -24,6 +24,7 @@
   const TILE_SELECTOR = "#tiles>*";
   const COUNTDOWN_SELECTOR = "#countdown>*";
   const PLAY_BUTTON_SELECTOR = "#playButton";
+  const VOWEL_REGEX = /[AEIOU]/;
 
   const shuffle = arr => {
     let shuffled = arr.slice();
@@ -39,10 +40,20 @@
   class Game {
     constructor() {
       document.querySelector(PLAY_BUTTON_SELECTOR).disabled = true;
-      this.board = shuffle(DICE).map(d => pick(d));
+      this.board = this.generateBoard();
       this.drawBoard();
       this.startAt = new Date();
       this.countdownTimer = setInterval(this.updateCountdown.bind(this), 100);
+    }
+
+    generateBoard() {
+      let board = shuffle(DICE).map(d => pick(d));
+      console.log(board);
+      if (board.some(a => VOWEL_REGEX.test(a))) {
+        return board;
+      } else {
+        return this.generateBoard();
+      }
     }
 
     drawBoard() {
