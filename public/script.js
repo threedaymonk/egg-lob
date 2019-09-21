@@ -50,7 +50,6 @@
 
     generateBoard() {
       let board = shuffle(DICE).map(d => pick(d));
-      console.log(board);
       if (board.some(a => VOWEL_REGEX.test(a))) {
         return board;
       } else {
