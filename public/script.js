@@ -26,6 +26,7 @@
   const PLAY_BUTTON_SELECTOR = "#playButton";
   const BODY_SELECTOR = "body";
   const VOWEL_REGEX = /[AEIOU]/;
+  const WORD_LIST_SELECTOR = "#results ul";
 
   const shuffle = arr => {
     let shuffled = arr.slice();
@@ -83,11 +84,63 @@
       clearInterval(this.countdownTimer);
       document.querySelector(PLAY_BUTTON_SELECTOR).disabled = false;
       document.querySelector(BODY_SELECTOR).classList.add("inactive");
+      this.showSolutions();
+    }
+
+    showSolutions() {
+      let words = window.solver.solve(this.board);
+      document.querySelector(WORD_LIST_SELECTOR)
+        .innerHTML = words.map(w => '<li>' + w + '<li>').join('')
+    }
+  }
+
+  class Solver {
+    constructor(dictionary) {
+      this.dictionary = dictionary;
+    }
+
+    solve(board) {
+      let mask = board.map((_, i) => i);
+      let words = {};
+      board.forEach((_, i) => {
+        this.walk(this.dictionary, board, i, "", mask, w => words[w] = 1);
+      });
+      return Object.keys(words).sort();
+    }
+
+    walk(dictionary, board, i, word, mask, callback) {
+      let nextMask = mask.filter(a => a !== i);
+      let tile = board[i].toUpperCase();
+      let nextDict = dictionary[tile];
+      let nextWord = word + tile;
+      if (nextDict) {
+        if (nextDict["."]) {
+          callback(nextWord);
+        }
+        this.neighbors(i, board.length).forEach(j => {
+          if (nextMask.includes(j)) {
+            this.walk(nextDict, board, j, nextWord, nextMask, callback);
+          }
+        });
+      }
+    }
+
+    neighbors(i, boardsize) {
+      let dimension = Math.sqrt(boardsize);
+      let x = i % dimension;
+      let y = Math.floor(i / dimension);
+      let xs = [x - 1, x, x + 1].filter(a => 0 <= a && a < dimension);
+      let ys = [y - 1, y, y + 1].filter(a => 0 <= a && a < dimension);
+      return [].concat(...ys.map(yy => xs.map(xx => yy * dimension + xx)))
+        .filter(a => a !== i);
     }
   }
 
   window.onload = () => {
-    document.querySelector(PLAY_BUTTON_SELECTOR).
-      addEventListener('click', () => new Game())
+    document.querySelector(PLAY_BUTTON_SELECTOR)
+      .addEventListener('click', () => new Game());
+    fetch('dictionary.json')
+      .then(response => response.json())
+      .then(dict => window.solver = new Solver(dict));
   }
 }

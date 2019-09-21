@@ -89,6 +89,20 @@ body {
   background-color: #ccc;
 }
 
+#results {
+  display: none;
+
+  ul, li {
+    margin-left: 0;
+    padding-left: 0;
+    list-style-type: none;
+  }
+}
+
+.inactive #results {
+  display: inherit;
+}
+
 #countdownBackground {
   max-width: $maximum-width;
   height: $bar-height;
