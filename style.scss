@@ -54,52 +54,52 @@ body {
     display: block;
     padding-bottom: 100%;
   }
+}
+
+#tiles {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border: 2px solid black;
+  background-color: black;
+
+  display: flex;
+  flex-wrap: wrap;
 
   div {
-    position: absolute;
-    width: 100%;
-    height: 100%;
+    position: relative;
+    display: block;
     border: 2px solid black;
-    background-color: black;
+    background-color: white;
+    text-align: center;
+    width: 25%;
+    height: 25%;
+    margin: 0;
+    padding-top: 4%;
 
-    display: flex;
-    flex-wrap: wrap;
+    &.east  { transform: rotate(90deg);  }
+    &.south { transform: rotate(180deg); }
+    &.west  { transform: rotate(270deg); }
 
-    div {
-      position: relative;
-      display: block;
-      border: 2px solid black;
-      background-color: white;
-      text-align: center;
-      width: 25%;
-      height: 25%;
-      margin: 0;
-      padding-top: 4%;
-
-      &.east  { transform: rotate(90deg);  }
-      &.south { transform: rotate(180deg); }
-      &.west  { transform: rotate(270deg); }
-
-      &.ambiguous { text-decoration: underline; }
-    }
-  }
-
-  &.inactive div div {
-    background-color: #ccc;
+    &.ambiguous { text-decoration: underline; }
   }
 }
 
-#countdown {
+.inactive #tiles div {
+  background-color: #ccc;
+}
+
+#countdownBackground {
   max-width: $maximum-width;
   height: $bar-height;
   background-color: $grey;
   margin-bottom: $spacing-unit;
+}
 
-  div {
-    background-color: $accent;
-    height: $bar-height;
-    width: 0;
-  }
+#countdownBar {
+  background-color: $accent;
+  height: $bar-height;
+  width: 0;
 }
 
 @media only screen and (min-width: $maximum-width)  {

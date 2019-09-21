@@ -22,9 +22,9 @@
   const AMBIGUOUS_LETTERS = ["M", "N", "W", "Z"];
   const GAME_DURATION = 2 * 60 * 1000;
   const TILE_SELECTOR = "#tiles>*";
-  const COUNTDOWN_SELECTOR = "#countdown>*";
+  const COUNTDOWN_SELECTOR = "#countdownBar";
   const PLAY_BUTTON_SELECTOR = "#playButton";
-  const BOARD_SELECTOR = "#board";
+  const BODY_SELECTOR = "body";
   const VOWEL_REGEX = /[AEIOU]/;
 
   const shuffle = arr => {
@@ -45,7 +45,7 @@
       this.drawBoard();
       this.startAt = new Date();
       this.countdownTimer = setInterval(this.updateCountdown.bind(this), 100);
-      document.querySelector(BOARD_SELECTOR).classList.remove("inactive");
+      document.querySelector(BODY_SELECTOR).classList.remove("inactive");
     }
 
     generateBoard() {
@@ -82,7 +82,7 @@
     finish() {
       clearInterval(this.countdownTimer);
       document.querySelector(PLAY_BUTTON_SELECTOR).disabled = false;
-      document.querySelector(BOARD_SELECTOR).classList.add("inactive");
+      document.querySelector(BODY_SELECTOR).classList.add("inactive");
     }
   }
 
