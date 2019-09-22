@@ -1,8 +1,8 @@
-'use strict';
+"use strict";
 
 {
   const shuffle = arr => {
-    let shuffled = arr.slice();
+    const shuffled = arr.slice();
     for (let i = shuffled.length - 1; i > 0; i--) {
       const rand = Math.floor(Math.random() * (i + 1));
       [shuffled[i], shuffled[rand]] = [shuffled[rand], shuffled[i]];
@@ -30,7 +30,7 @@
     }
 
     drawBoard(board) {
-      let tiles = document.querySelectorAll(TILE_SELECTOR);
+      const tiles = document.querySelectorAll(TILE_SELECTOR);
       board.forEach((letter, i) => {
         tiles[i].innerText = letter;
         tiles[i].className = pick(ORIENTATIONS);
@@ -55,7 +55,7 @@
 
     showSolutions(words) {
       document.querySelector(WORD_LIST_SELECTOR)
-        .innerHTML = words.map(w => '<li>' + w + '<li>').join('')
+        .innerHTML = words.map(w => `<li>${w}<li>`).join("");
     }
   }
 
@@ -75,11 +75,12 @@
     ["E", "I", "O", "S", "S",  "T"],
     ["E", "H", "R", "T", "V",  "W"],
     ["E", "E", "G", "H", "N",  "W"],
-    ["A", "F", "F", "K", "P",  "S"],
-  ]
+    ["A", "F", "F", "K", "P",  "S"]
+  ];
 
   const GAME_DURATION = 2 * 60 * 1000;
-  const VOWEL_REGEX = /[AEIOU]/;
+  const REFRESH_INTERVAL = 500;
+  const VOWEL_REGEX = /[AEIOU]/u;
 
   class Game {
     constructor(gui) {
@@ -88,12 +89,13 @@
       this.board = this.generateBoard();
       this.gui.drawBoard(this.board);
       this.startAt = new Date();
-      this.countdownTimer = setInterval(this.updateCountdown.bind(this), 500);
+      this.countdownTimer =
+        setInterval(this.updateCountdown.bind(this), REFRESH_INTERVAL);
       this.gui.setActive();
     }
 
     generateBoard() {
-      let board = shuffle(DICE).map(d => pick(d));
+      const board = shuffle(DICE).map(d => pick(d));
       if (board.some(a => VOWEL_REGEX.test(a))) {
         return board;
       } else {
@@ -102,8 +104,8 @@
     }
 
     updateCountdown() {
-      let elapsed = new Date() - this.startAt;
-      let fractionLeft = Math.max(0, GAME_DURATION - elapsed) / GAME_DURATION;
+      const elapsed = new Date() - this.startAt;
+      const fractionLeft = Math.max(0, GAME_DURATION - elapsed) / GAME_DURATION;
       this.gui.updateTimer(fractionLeft);
       if (fractionLeft <= 0) {
         this.finish();
@@ -128,8 +130,8 @@
     }
 
     solve(board) {
-      let mask = board.map((_, i) => i);
-      let words = new Set();
+      const mask = board.map((_, i) => i);
+      const words = new Set();
       board.forEach((_, i) => {
         this.walk(this.dictionary, board, i, "", mask, w => words.add(w));
       });
@@ -137,10 +139,10 @@
     }
 
     walk(dictionary, board, i, word, mask, callback) {
-      let nextMask = mask.filter(a => a !== i);
-      let tile = board[i].toUpperCase();
-      let nextDict = dictionary[tile];
-      let nextWord = word + tile;
+      const nextMask = mask.filter(a => a !== i);
+      const tile = board[i].toUpperCase();
+      const nextDict = dictionary[tile];
+      const nextWord = word + tile;
       if (nextDict) {
         if (nextDict["."]) {
           callback(nextWord);
@@ -154,22 +156,24 @@
     }
 
     neighbors(i, boardsize) {
-      let dimension = Math.sqrt(boardsize);
-      let x = i % dimension;
-      let y = Math.floor(i / dimension);
-      let xs = [x - 1, x, x + 1].filter(a => 0 <= a && a < dimension);
-      let ys = [y - 1, y, y + 1].filter(a => 0 <= a && a < dimension);
+      const dimension = Math.sqrt(boardsize);
+      const x = i % dimension;
+      const y = Math.floor(i / dimension);
+      const xs = [x - 1, x, x + 1].filter(a => 0 <= a && a < dimension);
+      const ys = [y - 1, y, y + 1].filter(a => 0 <= a && a < dimension);
       return [].concat(...ys.map(yy => xs.map(xx => yy * dimension + xx)))
         .filter(a => a !== i);
     }
   }
 
   window.onload = () => {
-    let gui = new GUI();
+    const gui = new GUI();
     document.querySelector(PLAY_BUTTON_SELECTOR)
-      .addEventListener('click', () => new Game(gui));
-    fetch('dictionary.json')
+      .addEventListener("click", () => new Game(gui));
+    fetch("dictionary.json")
       .then(response => response.json())
-      .then(dict => window.solver = new Solver(dict));
-  }
+      .then(dict => {
+        window.solver = new Solver(dict);
+      });
+  };
 }
