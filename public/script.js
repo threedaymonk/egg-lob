@@ -129,11 +129,11 @@
 
     solve(board) {
       let mask = board.map((_, i) => i);
-      let words = {};
+      let words = new Set();
       board.forEach((_, i) => {
-        this.walk(this.dictionary, board, i, "", mask, w => words[w] = 1);
+        this.walk(this.dictionary, board, i, "", mask, w => words.add(w));
       });
-      return Object.keys(words).sort();
+      return [...words].sort();
     }
 
     walk(dictionary, board, i, word, mask, callback) {
