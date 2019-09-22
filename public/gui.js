@@ -9,7 +9,7 @@ const AMBIGUOUS_LETTERS = ["M", "N", "W", "Z"];
 const ORIENTATIONS = ["north", "east", "south", "west"];
 
 export default class GUI {
-  attachPlayButton(callback) {
+  onPlay(callback) {
     document.querySelector(PLAY_BUTTON_SELECTOR)
       .addEventListener("click", callback);
   }

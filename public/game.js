@@ -25,6 +25,7 @@ const VOWEL_REGEX = /[AEIOU]/u;
 export default class Game {
   constructor(gui) {
     this.gui = gui;
+    this.onFinishCallbacks = [];
   }
 
   start(duration) {
@@ -61,9 +62,16 @@ export default class Game {
     this.gui.setInactive();
     this.gui.enablePlayButton();
     this.showSolutions();
+    this.onFinishCallbacks.forEach(cb => {
+      cb();
+    });
   }
 
   showSolutions() {
     this.gui.showSolutions(this.solver.solve(this.board));
+  }
+
+  onFinish(callback) {
+    this.onFinishCallbacks.push(callback);
   }
 }
