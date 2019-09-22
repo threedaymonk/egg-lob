@@ -1,4 +1,64 @@
+'use strict';
+
 {
+  const shuffle = arr => {
+    let shuffled = arr.slice();
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const rand = Math.floor(Math.random() * (i + 1));
+      [shuffled[i], shuffled[rand]] = [shuffled[rand], shuffled[i]];
+    }
+    return shuffled;
+  };
+
+  const pick = arr => arr[Math.floor(Math.random() * arr.length)];
+
+  const TILE_SELECTOR = "#tiles>*";
+  const COUNTDOWN_SELECTOR = "#countdownBar";
+  const PLAY_BUTTON_SELECTOR = "#playButton";
+  const BODY_SELECTOR = "body";
+  const WORD_LIST_SELECTOR = "#results ul";
+  const AMBIGUOUS_LETTERS = ["M", "N", "W", "Z"];
+  const ORIENTATIONS = ["north", "east", "south", "west"];
+
+  class GUI {
+    disablePlayButton() {
+      document.querySelector(PLAY_BUTTON_SELECTOR).disabled = true;
+    }
+
+    enablePlayButton() {
+      document.querySelector(PLAY_BUTTON_SELECTOR).disabled = false;
+    }
+
+    drawBoard(board) {
+      let tiles = document.querySelectorAll(TILE_SELECTOR);
+      board.forEach((letter, i) => {
+        tiles[i].innerText = letter;
+        tiles[i].className = pick(ORIENTATIONS);
+        if (AMBIGUOUS_LETTERS.includes(letter)) {
+          tiles[i].classList.add("ambiguous");
+        }
+      });
+    }
+
+    updateTimer(fractionLeft) {
+      document.querySelector(COUNTDOWN_SELECTOR)
+        .setAttribute("style", `width: ${fractionLeft * 100}%;`);
+    }
+
+    setActive() {
+      document.querySelector(BODY_SELECTOR).classList.remove("inactive");
+    }
+
+    setInactive() {
+      document.querySelector(BODY_SELECTOR).classList.add("inactive");
+    }
+
+    showSolutions(words) {
+      document.querySelector(WORD_LIST_SELECTOR)
+        .innerHTML = words.map(w => '<li>' + w + '<li>').join('')
+    }
+  }
+
   const DICE = [
     ["H", "I", "M", "N", "Qu", "U"],
     ["E", "E", "I", "N", "S",  "U"],
@@ -17,36 +77,19 @@
     ["E", "E", "G", "H", "N",  "W"],
     ["A", "F", "F", "K", "P",  "S"],
   ]
-  const BOARD_SIZE = DICE.length;
-  const ORIENTATIONS = ["north", "east", "south", "west"];
-  const AMBIGUOUS_LETTERS = ["M", "N", "W", "Z"];
+
   const GAME_DURATION = 2 * 60 * 1000;
-  const TILE_SELECTOR = "#tiles>*";
-  const COUNTDOWN_SELECTOR = "#countdownBar";
-  const PLAY_BUTTON_SELECTOR = "#playButton";
-  const BODY_SELECTOR = "body";
   const VOWEL_REGEX = /[AEIOU]/;
-  const WORD_LIST_SELECTOR = "#results ul";
-
-  const shuffle = arr => {
-    let shuffled = arr.slice();
-    for (let i = shuffled.length - 1; i > 0; i--) {
-      const rand = Math.floor(Math.random() * (i + 1));
-      [shuffled[i], shuffled[rand]] = [shuffled[rand], shuffled[i]];
-    }
-    return shuffled;
-  };
-
-  const pick = arr => arr[Math.floor(Math.random() * arr.length)];
 
   class Game {
-    constructor() {
-      document.querySelector(PLAY_BUTTON_SELECTOR).disabled = true;
+    constructor(gui) {
+      this.gui = gui;
+      this.gui.disablePlayButton();
       this.board = this.generateBoard();
-      this.drawBoard();
+      this.gui.drawBoard(this.board);
       this.startAt = new Date();
-      this.countdownTimer = setInterval(this.updateCountdown.bind(this), 100);
-      document.querySelector(BODY_SELECTOR).classList.remove("inactive");
+      this.countdownTimer = setInterval(this.updateCountdown.bind(this), 500);
+      this.gui.setActive();
     }
 
     generateBoard() {
@@ -58,23 +101,10 @@
       }
     }
 
-    drawBoard() {
-      let tiles = document.querySelectorAll(TILE_SELECTOR);
-      for (let i = 0; i < BOARD_SIZE; i++) {
-        let letter = this.board[i];
-        tiles[i].innerText = letter;
-        tiles[i].className = pick(ORIENTATIONS);
-        if (AMBIGUOUS_LETTERS.includes(letter)) {
-          tiles[i].classList.add("ambiguous");
-        }
-      }
-    }
-
     updateCountdown() {
       let elapsed = new Date() - this.startAt;
       let fractionLeft = Math.max(0, GAME_DURATION - elapsed) / GAME_DURATION;
-      document.querySelector(COUNTDOWN_SELECTOR).
-        setAttribute("style", `width: ${fractionLeft * 100}%;`);
+      this.gui.updateTimer(fractionLeft);
       if (fractionLeft <= 0) {
         this.finish();
       }
@@ -82,15 +112,13 @@
 
     finish() {
       clearInterval(this.countdownTimer);
-      document.querySelector(PLAY_BUTTON_SELECTOR).disabled = false;
-      document.querySelector(BODY_SELECTOR).classList.add("inactive");
+      this.gui.enablePlayButton();
+      this.gui.setInactive();
       this.showSolutions();
     }
 
     showSolutions() {
-      let words = window.solver.solve(this.board);
-      document.querySelector(WORD_LIST_SELECTOR)
-        .innerHTML = words.map(w => '<li>' + w + '<li>').join('')
+      this.gui.showSolutions(window.solver.solve(this.board));
     }
   }
 
@@ -137,8 +165,9 @@
   }
 
   window.onload = () => {
+    let gui = new GUI();
     document.querySelector(PLAY_BUTTON_SELECTOR)
-      .addEventListener('click', () => new Game());
+      .addEventListener('click', () => new Game(gui));
     fetch('dictionary.json')
       .then(response => response.json())
       .then(dict => window.solver = new Solver(dict));
