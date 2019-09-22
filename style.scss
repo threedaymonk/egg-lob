@@ -92,6 +92,10 @@ body {
 #results {
   display: none;
 
+  ul {
+    column-count: 2;
+  }
+
   ul, li {
     margin-left: 0;
     padding-left: 0;
@@ -119,5 +123,8 @@ body {
 @media only screen and (min-width: $maximum-width)  {
   #board {
     font-size: $font-scale * $maximum-width;
+  }
+  #results ul {
+    column-count: 3;
   }
 }
