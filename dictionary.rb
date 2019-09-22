@@ -12,4 +12,4 @@ ARGF.each_line do |word|
   node['.'] = 1
 end
 
-puts JSON.pretty_generate(root)
+puts JSON.generate(root)
