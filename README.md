@@ -8,8 +8,13 @@ A simple implementation of a popular word game.
 
 ## Build
 
-    $ make
+    make
 
 ## Play
 
-Open `index.html` in a browser.
+Run a local webserver:
+
+    cd public
+    python -m SimpleHTTPServer 8000
+
+Open [localhost:8000](http://localhost:8000/) in a browser.
