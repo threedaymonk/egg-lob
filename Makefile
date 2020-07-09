@@ -1,14 +1,20 @@
 .PHONY : default clean lint
 
+NPM_LOCK=package-lock.json
+
 default : public/style.css
 
-public/%.css : %.scss
-	sass $< $@
+$(NPM_LOCK) : package.json
+	npm install
+
+public/%.css : %.scss $(NPM_LOCK)
+	npx sass $< $@
 
 public/dictionary.json : words.txt
 	ruby dictionary.rb $< > $@
+
 lint :
-	eslint public/*.js
+	npx eslint public/*.js
 
 clean :
 	rm -f public/*.css public/*.map
