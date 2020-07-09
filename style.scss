@@ -21,8 +21,8 @@ body {
   font-family: sans-serif;
 }
 
-#wrapper {
-  margin: 0 auto;
+#game {
+  margin: 0 0;
   position: relative;
   max-width: $maximum-width;
 }
@@ -93,7 +93,7 @@ body {
   display: none;
 
   ul {
-    column-count: 2;
+    column-width: 12ex;
   }
 
   ul, li {
@@ -123,8 +123,5 @@ body {
 @media only screen and (min-width: $maximum-width)  {
   #board {
     font-size: $font-scale * $maximum-width;
-  }
-  #results ul {
-    column-count: 3;
   }
 }
