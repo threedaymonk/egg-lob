@@ -1,8 +1,10 @@
-.PHONY : default clean lint
+.PHONY : default clean lint dictionary
 
 NPM_LOCK=package-lock.json
 
 default : public/style.css
+
+dictionary : public/dictionary.json
 
 $(NPM_LOCK) : package.json
 	npm install
