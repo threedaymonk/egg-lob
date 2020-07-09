@@ -1,6 +1,7 @@
-.PHONY : default clean lint dictionary
+.PHONY : default clean lint dictionary serve
 
-NPM_LOCK=package-lock.json
+NPM_LOCK = package-lock.json
+TARGETS = public/style.css public/dictionary.json
 
 default : public/style.css
 
@@ -14,6 +15,9 @@ public/%.css : %.scss $(NPM_LOCK)
 
 public/dictionary.json : words.txt
 	ruby dictionary.rb $< > $@
+
+start : $(TARGETS) $(NPM_LOCK)
+	npx http-server public
 
 lint :
 	npx eslint public/*.js
